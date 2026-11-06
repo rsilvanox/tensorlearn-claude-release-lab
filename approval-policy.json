@@ -1,7 +1,15 @@
 {
   "environment": "staging",
   "requireApproval": true,
-  "requiredApprovalFields": [],
-  "rollbackWhen": [],
-  "recoveryChecks": []
+  "requiredApprovalFields": ["id", "action", "environment", "version", "expiresAt"],
+  "rollbackWhen": [
+    { "metric": "errorRate", "operator": ">", "threshold": 0.01 },
+    { "metric": "p95Ms", "operator": ">", "threshold": 300 }
+  ],
+  "recoveryChecks": [
+    { "metric": "errorRate", "operator": "<=", "threshold": 0.01 },
+    { "metric": "p95Ms", "operator": "<=", "threshold": 300 }
+  ],
+  "healthyObservationsRequired": 2,
+  "onFailedRollback": "escalate"
 }
